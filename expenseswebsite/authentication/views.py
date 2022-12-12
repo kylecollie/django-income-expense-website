@@ -3,6 +3,7 @@ from django.views import View
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from validate_email import validate_email 
 
 
@@ -21,7 +22,6 @@ class EmailValidationView(View):
 
         return JsonResponse({'email_valid': True})
     
-
 class UsernameValidation(View):
     def post(self, request):
         data=json.loads(request.body)
@@ -37,4 +37,11 @@ class UsernameValidation(View):
 
 class RegistrationView(View):
     def get(self, request):
+        return render(request, 'authentication/register.html')
+    
+    def post(self, request):
+        messages.success(request,'Success!')
+        messages.warning(request,'Warning!')
+        messages.info(request,'Info!')
+        messages.error(request,'Error!')
         return render(request, 'authentication/register.html')
