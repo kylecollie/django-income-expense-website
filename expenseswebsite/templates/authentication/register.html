@@ -21,14 +21,15 @@
 
                     <div class="form-group">
                         <input type="text" name="username" id="usernameField" placeholder="username"
-                            class="form-control form-control-sm">
+                            class="form-control form-control-sm" value="{{ fieldValues.username }}"">
                     </div>
-                    <div class="usernameFeedbackArea invalid-feedback" style="display:none;"></div>
+                    <div class=" usernameFeedbackArea invalid-feedback" style="display:none;">
+                    </div>
                     <p class="text-sm text-success usernameSuccessOutput"></p>
 
                     <div class="form-group">
                         <input type="email" name="email" id="emailField" placeholder="email"
-                            class="form-control form-control-sm">
+                            class="form-control form-control-sm" value="{{ fieldValues.email }}">
                     </div>
                     <div class="emailFeedbackArea invalid-feedback" style="display:none;"></div>
                     <p class="text-sm text-success emailSuccessOutput"></p>
