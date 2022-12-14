@@ -8,6 +8,7 @@ django = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 validate-email = "*"
+six = "*"
 
 [dev-packages]
 
