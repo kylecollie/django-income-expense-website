@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils.encoding import force_bytes, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 from .utils import token_generator
@@ -104,4 +104,22 @@ class RegistrationView(View):
 
 class VerificationView(View):
     def get(self, request, uidb64, token):
+
+        try:
+            id = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk = id)
+
+            if user.is_active:
+                return redirect('login')
+            
+            user.is_active = True
+            user.save()
+
+        except Exception as ex:
+            pass
+
         return redirect('login')
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'authentication/login.html')
