@@ -1,5 +1,6 @@
 import json
 from validate_email import validate_email
+from django.contrib import auth
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
@@ -102,7 +103,6 @@ class RegistrationView(View):
         
         return render(request, 'authentication/register.html')
 
-
 class VerificationView(View):
     def get(self, request, uidb64, token):
 
@@ -130,8 +130,34 @@ class VerificationView(View):
             # import pdb; pdb.set_trace()
             return redirect('login')
 
-        
-
 class LoginView(View):
     def get(self, request):
         return render(request, 'authentication/login.html')
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if username and password:
+            user = auth.authenticate(username=username, password=password)
+
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    messages.success(request, 'Welcome, '+user.username+' you are now logged in')
+                    return redirect('expenses')
+
+                messages.error(request, 'Account is not active, please check your email')
+                return render(request, 'authentication/login.html')    
+
+            messages.error(request, 'Invalid credentials, try again')
+            return render(request, 'authentication/login.html')
+            
+        messages.error(request, 'Please enter username and password')
+        return render(request, 'authentication/login.html')
+
+class LogoutView(View):
+    def post(self, request):
+        auth.logout(request)
+        messages.success(request, 'You have been logged out')
+        return redirect('login')
