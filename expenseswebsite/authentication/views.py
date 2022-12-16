@@ -13,6 +13,7 @@ from django.views import View
 from .utils import token_generator
 
 
+
 # Create your views here.
 
 class EmailValidationView(View):
@@ -107,8 +108,9 @@ class VerificationView(View):
 
         try:
             id = force_str(urlsafe_base64_decode(uidb64))
+            # import pdb; pdb.set_trace()
             user = User.objects.get(pk = id)
-
+            
             if user.is_active:
                 return redirect('login')
             
@@ -121,10 +123,14 @@ class VerificationView(View):
             messages.success(request, 'Account activated successfully')
             return redirect('login')
 
-        except Exception as ex:
-            pass
+        except User.DoesNotExist:
+            return redirect('register'+'?message='+'User not found')
 
-        return redirect('login')
+        except Exception as ex:
+            # import pdb; pdb.set_trace()
+            return redirect('login')
+
+        
 
 class LoginView(View):
     def get(self, request):
