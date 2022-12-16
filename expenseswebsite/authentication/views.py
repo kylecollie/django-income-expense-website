@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 from .utils import token_generator
@@ -106,14 +106,20 @@ class VerificationView(View):
     def get(self, request, uidb64, token):
 
         try:
-            id = force_text(urlsafe_base64_decode(uidb64))
+            id = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk = id)
 
             if user.is_active:
                 return redirect('login')
             
+            if not token_generator.check_token(user, token):
+                return redirect('login'+'?message='+'User already activated')
+            
             user.is_active = True
             user.save()
+
+            messages.success(request, 'Account activated successfully')
+            return redirect('login')
 
         except Exception as ex:
             pass
