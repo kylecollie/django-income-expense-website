@@ -2,20 +2,21 @@
 
 {% block content %}
 
-<div class="container">
-    {% include 'partials/_messages.html' %}
-
-    <h1>Expenses List</h1>
-
-    <ul class="list-group">
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-        <li class="list-group-item">Bought Coffee</li>
-    </ul>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="#">My Expenses</a></li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'add-expenses' %}" class="btn btn-primary mt-1">Add Expense</a>
+        </div>
+    </div>
 </div>
+{% include 'partials/_messages.html' %}
 
 {% endblock %}
