@@ -9,7 +9,14 @@
         {% csrf_token %}
         <div class="input-group">
             <select name="currency" id="currencySelect" class="custom-select">
-                <option selected>Choose...</option>
+
+                {% if user_preferences.currency %}
+                <option name="currency" selected value="{{user_preferences.currency}}">{{user_preferences.currency}}
+                </option>
+                {% else %}
+                <option name="currency" selected>Choose...</option>
+                {% endif %}
+
                 {% for currency in currencies %}
                 <option name="currency" value="{{ currency.name }} - {{ currency.value }}">{{currency.name}} -
                     {{currency.value}}</option>
