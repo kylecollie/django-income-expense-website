@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block content %}
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -11,7 +12,9 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{% url 'expenses' %}" method="post">
+            <form action="{% url 'add-expenses' %}" method="post">
+                {% include 'partials/_messages.html' %}
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="">Amount</label>
                     <input type="number" class="form-control form-control-sm" name="amount" id="amount">
@@ -22,10 +25,12 @@
                 </div>
                 <div class="form-group">
                     <label for="">Category</label>
-                    <select name="category" id="category">
-                        <option name="category" value="">1</option>
-                        <option name="category" value="">2</option>
-                        <option name="category" value="">3</option>
+                    <select class="form-control" name="category" id="category">
+                        <option name="category" value="">Select one...</option>
+                        {% for category in categories %}
+                        <option name="category" value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+
                     </select>
                 </div>
                 <div class="form-group">
@@ -39,8 +44,4 @@
 
 
 </div>
-
-
-{% block content %}
-<h1>Add Expense</h1>
 {% endblock %}
